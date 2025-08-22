@@ -1,0 +1,15 @@
+[workspace]
+members = ["lib"]
+
+[package]
+name = "rust-dsa"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dsa_lib = { path = "lib" }
+
+
+[[bin]]
+name = "cf_1220_a"
+path = "bin/cf_1220_a.rs"
