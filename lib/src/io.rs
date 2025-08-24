@@ -1,12 +1,11 @@
-use std::io::BufRead;
 use std::str::FromStr;
 
-pub struct Scanner<R> {
+pub struct Scanner<R: std::io::BufRead> {
     the_reader: R,
     the_buffer: Vec<String>,
 }
 
-impl<R: BufRead> Scanner<R> {
+impl<R: std::io::BufRead> Scanner<R> {
     pub fn new(the_reader: R) -> Self {
         Scanner {
             the_reader,
@@ -44,8 +43,8 @@ mod tests {
     #[test]
     fn read_vec() {
         let my_data = String::from("1 2 3\n");
-        let mut my_reader= Scanner::new(Cursor::new(my_data));
-        let my_read_vec : Vec<u32> = (0..2).map(|_| my_reader.next()).collect();
+        let mut my_reader = Scanner::new(Cursor::new(my_data));
+        let my_read_vec: Vec<u32> = (0..2).map(|_| my_reader.next()).collect();
 
         assert_eq!(vec![1, 2, 3], my_read_vec);
     }
@@ -53,7 +52,7 @@ mod tests {
     #[test]
     fn read_singles() {
         let my_data = String::from("1\n2 3\n");
-        let mut my_reader= Scanner::new(Cursor::new(my_data));
+        let mut my_reader = Scanner::new(Cursor::new(my_data));
 
         let my_first = my_reader.next();
         let my_second = my_reader.next();
@@ -63,4 +62,20 @@ mod tests {
         assert_eq!(2, my_second);
         assert_eq!(3, my_third);
     }
+}
+
+#[macro_export]
+macro_rules! create_test {
+    ($name:ident, $input:literal, $output:literal) => {
+        #[test]
+        fn $name() {
+            let my_data = $input;
+            let my_reader = crate::Scanner::new(std::io::Cursor::new(my_data));
+            let mut my_writer: Vec<u8> = Vec::new();
+            solve(my_reader, &mut my_writer);
+
+            let my_out = String::from_utf8(my_writer).unwrap();
+            assert_eq!(my_out, $output);
+        }
+    };
 }
