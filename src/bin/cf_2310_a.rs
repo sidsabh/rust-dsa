@@ -1,7 +1,6 @@
 use dsa_lib::io::Scanner;
-use std::io::{stdout, BufRead, Write};
 
-fn solve(mut a_reader: Scanner<impl BufRead>, a_writer: &mut impl Write) {
+fn solve(a_reader: &mut Scanner<impl std::io::BufRead>, a_writer: &mut impl std::io::Write) {
     let my_num_testcases: u32 = a_reader.next();
 
     for _ in 0..my_num_testcases {
@@ -21,8 +20,8 @@ fn solve(mut a_reader: Scanner<impl BufRead>, a_writer: &mut impl Write) {
 }
 
 fn main() {
-    let my_reader = Scanner::new(std::io::stdin().lock());
-    solve(my_reader, &mut stdout().lock());
+    let mut my_reader = Scanner::new(std::io::stdin().lock());
+    solve(&mut my_reader, &mut std::io::stdout().lock());
 }
 
 #[cfg(test)]
@@ -32,9 +31,9 @@ mod tests {
     #[test]
     fn test() {
         let my_data = "2\n3\n0 1 1\n3\n1 2 3\n";
-        let my_reader = crate::Scanner::new(Cursor::new(my_data));
+        let mut my_reader = crate::Scanner::new(Cursor::new(my_data));
         let mut my_writer: Vec<u8> = Vec::new();
-        solve(my_reader, &mut my_writer);
+        solve(&mut my_reader, &mut my_writer);
 
         let my_out = String::from_utf8(my_writer).unwrap();
         assert_eq!(my_out, "3\n6\n");

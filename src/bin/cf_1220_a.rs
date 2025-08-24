@@ -1,6 +1,5 @@
 use std::collections::HashMap;
 use std::io;
-use std::ops::Index;
 
 fn main() -> io::Result<()> {
     let mut buffer = String::new();
@@ -48,22 +47,4 @@ fn main() -> io::Result<()> {
     }
 
     Ok(())
-}
-
-fn test() {
-    let mut x = 5;
-    let g = &mut x;
-    call_fn(g);
-    print!("{g}");
-
-    let my_str = String::from("lamron");
-    let x = my_str.index(0..1);
-    print!("{x}");
-
-    let my_vec = vec!["s"];
-    let y = my_vec.index(0..1);
-}
-
-fn call_fn(v: &mut i32) {
-    print!("{v}");
 }

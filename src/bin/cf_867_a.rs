@@ -1,6 +1,6 @@
 use dsa_lib::io::Scanner;
 
-fn solve(mut a_reader: Scanner<impl std::io::BufRead>, a_writer: &mut impl std::io::Write) {
+fn solve(a_reader: &mut Scanner<impl std::io::BufRead>, a_writer: &mut impl std::io::Write) {
     let _my_num_days: u32 = a_reader.next();
     let my_location_string = a_reader.next::<String>();
 
@@ -28,10 +28,9 @@ fn solve(mut a_reader: Scanner<impl std::io::BufRead>, a_writer: &mut impl std::
 }
 
 fn main() {
-    let my_reader = Scanner::new(std::io::stdin().lock());
-    solve(my_reader, &mut std::io::stdout().lock());
+    let mut my_reader = Scanner::new(std::io::stdin().lock());
+    solve(&mut my_reader, &mut std::io::stdout().lock());
 }
-
 #[cfg(test)]
 mod tests {
     use crate::solve;

@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 pub struct Scanner<R: std::io::BufRead> {
     the_reader: R,
     the_buffer: Vec<String>,
@@ -13,7 +11,7 @@ impl<R: std::io::BufRead> Scanner<R> {
         }
     }
 
-    pub fn next<T: FromStr>(&mut self) -> T
+    pub fn next<T: std::str::FromStr>(&mut self) -> T
     where
         T::Err: std::fmt::Debug,
     {
@@ -70,9 +68,9 @@ macro_rules! create_test {
         #[test]
         fn $name() {
             let my_data = $input;
-            let my_reader = crate::Scanner::new(std::io::Cursor::new(my_data));
+            let mut my_reader = crate::Scanner::new(std::io::Cursor::new(my_data));
             let mut my_writer: Vec<u8> = Vec::new();
-            solve(my_reader, &mut my_writer);
+            solve(&mut my_reader, &mut my_writer);
 
             let my_out = String::from_utf8(my_writer).unwrap();
             assert_eq!(my_out, $output);
