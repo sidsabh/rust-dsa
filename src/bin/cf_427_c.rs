@@ -1,5 +1,3 @@
-use std::collections::VecDeque;
-
 use dsa_lib::io::Scanner;
 
 const MOD : u64 = (1e9 as u64) + 7;
@@ -20,9 +18,9 @@ fn solve(a_reader: &mut Scanner<impl std::io::BufRead>, a_writer: &mut impl std:
         transpose_graph[v as usize].push(u);
     }
 
-    fn dfs(graph: &Vec<Vec<u32>>, stack: &mut VecDeque<(usize, bool)>, visited: &mut Vec<bool>, mut post_finish : impl FnMut(usize)) {
+    fn dfs(graph: &Vec<Vec<u32>>, stack: &mut Vec<(usize, bool)>, visited: &mut Vec<bool>, mut post_finish : impl FnMut(usize)) {
         while !stack.is_empty() {
-            let (current, finished) = stack.pop_back().unwrap();
+            let (current, finished) = stack.pop().unwrap();
             if finished {
                 post_finish(current);
                 continue;
@@ -32,27 +30,27 @@ fn solve(a_reader: &mut Scanner<impl std::io::BufRead>, a_writer: &mut impl std:
             }
             visited[current] = true;
 
-            stack.push_back((current, true));
+            stack.push((current, true));
             for neighbor in graph[current].iter().map(|x| *x as usize) {
                 if !visited[neighbor] {
-                    stack.push_back((neighbor, false));
+                    stack.push((neighbor, false));
                 }
             }
         }
     }
 
     let mut visited = vec![false; num_junctions];
-    let mut timestamp_stack= VecDeque::new();
+    let mut timestamp_stack= Vec::new();
 
-    let mut stack = VecDeque::new();
+    let mut stack = Vec::new();
     for node in 0..num_junctions {
         if visited[node] {
             continue;
         }
-        stack.push_back((node, false));
+        stack.push((node, false));
         dfs(&graph, &mut stack, &mut visited, |current: usize| {
-            timestamp_stack.push_back((usize::MAX, true));
-            timestamp_stack.push_back((current, false));
+            timestamp_stack.push((usize::MAX, true));
+            timestamp_stack.push((current, false));
         });
     }
 
